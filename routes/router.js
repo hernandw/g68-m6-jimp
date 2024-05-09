@@ -3,6 +3,7 @@ import Jimp from "jimp";
 import { v4 as uuidv4 } from 'uuid';
 import moment from "moment";
 import path from "path";
+import fs from "fs";
 const __dirname = path.resolve();
 const router = express.Router();
 
@@ -13,7 +14,19 @@ router.get('/crear', async (req, res) => {
         .resize(250, Jimp.AUTO)
         .sepia()
         .writeAsync(`uploads/imagen-${moment().format('X')}.png`)
-    res.send('imagen creada con exito!');
+    const imagePath = path.join(__dirname, 'uploads', 'imagen-1715217689.png')
+   fs.readFile(imagePath, (err, data) => {
+    if (err) {
+      res.status(404).send("Imagen no encontrada");
+    } else {
+      res.setHeader("Content-Type", "image/png");
+      res.send(data); // Envía la imagen como respuesta; // Envía la imagen como respuesta
+    }
+  });
+    
+
+    
+   
 })
 
 export default router
